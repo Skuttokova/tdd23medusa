@@ -43,20 +43,20 @@ class Main(events.Event):
                             "playBackground.png", "meny.png", "start2.png"]
 
         #Make all images pygame.Surface object and make them transparent
-        for i in range (len(self._image_list)):
-            self._image_list[i] = pygame.image.load(self._image_list[i])
+        for i in range (len(self._image_list) -1):
+            self._image_list[i] = pygame.image.load(self._image_list[i]).convert()
             self._image_list[i].set_colorkey((255,255,255))
         
     def on_loop(self):
-        self._snake_coordinate = [(250,250), (240,250)]
-        self._direction = "RIGHT"
-        if self._direction == "UP":
+        self._snake_coordinate = [(25,25), (24,25)]
+        
+        if self.direction == self.UP:
             self._snake_coordinate.insert(0, (self._snake_coordinate[0][0], self._snake_coordinate[0][1] - 1) )
-        elif self._direction == "DOWN":
+        elif self.direction == self.DOWN:
             self._snake_coordinate.insert(0, (self._snake_coordinate[0][0], self._snake_coordinate[0][1] + 1) )
-        elif self._direction == "LEFT":
+        elif self.direction == self.LEFT:
             self._snake_coordinate.insert(0, (self._snake_coordinate[0][0] -1, self._snake_coordinate[0][1] ) )
-        elif self._direction == "RIGHT":
+        elif self.direction == self.RIGHT:
             self._snake_coordinate.insert(0, (self._snake_coordinate[0][0] +1, self._snake_coordinate[0][1] ) )
         
         
@@ -135,6 +135,7 @@ class Main(events.Event):
     def state_play_game(self):
         self._display_surf.fill(self._bgcolor)
         self.draw_snake()
+        pygame.display.flip()
 
     def show_credits(self):
         self._display_surf.blit(self._credit_screen,(0,0))
@@ -156,8 +157,10 @@ class Main(events.Event):
         for coord in self._snake_coordinate:
             x = coord[0] * self._cellsize
             y = coord[1] * self._cellsize
-            self._coord_rect = pygame.Rect(x,y, self._cellsize, self._cellsize)
+            self._coord_rect = pygame.Rect(10,10, self._cellsize, self._cellsize)
             pygame.draw.rect(self._display_surf, self._green, self._coord_rect)
+
+
 if __name__ == "__main__":
     theMain = Main()
     theMain.on_execute()
