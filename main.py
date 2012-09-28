@@ -16,7 +16,8 @@ class Main(events.Event):
         self._menu_screen = None
         self._pts_random = None
         self._rand_nr = None
-        self._snake_coordinate = None
+        self._FPS = 15
+        self._snake_coordinate = [(25,25), (26,25)]
         self._move_dict = None
         self._direction = None
         self._cellsize = 10
@@ -31,6 +32,7 @@ class Main(events.Event):
         self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         pygame.display.set_caption('Medusa')
         self._running = True
+
         self._set_image = pygame.image.load("start2.png").convert()
         self._start_screen = pygame.transform.scale(self._set_image, (800, 600 ))
         self._set_image = pygame.image.load("meny.png").convert()
@@ -48,18 +50,29 @@ class Main(events.Event):
             self._image_list[i].set_colorkey((255,255,255))
         
     def on_loop(self):
-        self._snake_coordinate = [(25,25), (24,25)]
+        #self._snake_coordinate = [(25,25), (26,25)]
+        self._snake_coordinate.pop()
         
         if self.direction == self.UP:
             self._snake_coordinate.insert(0, (self._snake_coordinate[0][0], self._snake_coordinate[0][1] - 1) )
+            print self._snake_coordinate[0][0]
         elif self.direction == self.DOWN:
             self._snake_coordinate.insert(0, (self._snake_coordinate[0][0], self._snake_coordinate[0][1] + 1) )
+            print self._snake_coordinate[0][0]
         elif self.direction == self.LEFT:
             self._snake_coordinate.insert(0, (self._snake_coordinate[0][0] -1, self._snake_coordinate[0][1] ) )
+            print self._snake_coordinate[0][0]
         elif self.direction == self.RIGHT:
             self._snake_coordinate.insert(0, (self._snake_coordinate[0][0] +1, self._snake_coordinate[0][1] ) )
+            print self._snake_coordinate[0][0]
+
         
-        
+
+
+    def game_rules(self):
+        if self._snake_coordinate[0][0] == -1 or self._snake_coordinate[0][0] == self.width or self._snake_coordinate[0][1] == self.height:
+            return
+    
     def on_render(self):
         
         if self.state == 1:
@@ -79,6 +92,7 @@ class Main(events.Event):
             self.state_play_game()
         elif self.state == 8:
             self.show_credits()
+        self.menu_clock.tick(self._FPS)
         pygame.display.flip()
         
     def on_cleanup(self):
@@ -148,6 +162,9 @@ class Main(events.Event):
         while self._running:
             for event in pygame.event.get():
                 self.on_event(event)
+            if self._snake_coordinate[0][0] == -1 or self._snake_coordinate[0][0] == 80 or self._snake_coordinate[0][1] == 80:
+                return
+            
             self.on_loop()
             self.on_render()
         self.on_cleanup()
@@ -157,7 +174,7 @@ class Main(events.Event):
         for coord in self._snake_coordinate:
             x = coord[0] * self._cellsize
             y = coord[1] * self._cellsize
-            self._coord_rect = pygame.Rect(10,10, self._cellsize, self._cellsize)
+            self._coord_rect = pygame.Rect(x,y, self._cellsize, self._cellsize)
             pygame.draw.rect(self._display_surf, self._green, self._coord_rect)
 
 

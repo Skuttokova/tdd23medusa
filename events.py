@@ -17,10 +17,10 @@ class Event(object):
                 self._running = False
             elif event.key == pygame.K_s and self.state == 1:
                 self.state = 2
-            elif event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_DOWN and self.state != 7:
                 if self.state > 1 and self.state < 6:
                     self.state += 1
-            elif event.key == pygame.K_UP:
+            elif event.key == pygame.K_UP and self.state != 7:
                 if self.state > 2  and self.state < 7:
                     self.state -= 1
             elif event.key == pygame.K_RETURN:
@@ -32,7 +32,7 @@ class Event(object):
                 elif self.state == 6:
                     self._running = False
 
-            elif event.key == pygame.K_LEFT and self.direction != self.RIGHT:
+            elif event.key == pygame.K_LEFT and self.direction != self.RIGHT and self.state != 1:
                 self.direction = self.LEFT
                 print "Left pressed"
             elif event.key == pygame.K_RIGHT and self.direction != self.LEFT:
