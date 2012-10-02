@@ -26,7 +26,7 @@ class Main(events.Event):
         self._red = (255,0,0)
         self._bgcolor = self._black
         self._image_list = None
-
+        #self._apple = (500,300)
         self._apple = (randrange(10,780), randrange(10,580))
         super(Main, self).__init__()
         
@@ -56,15 +56,18 @@ class Main(events.Event):
         
     def on_loop(self):
         if self.state == 7:
-
+            print "snake coord 0 0",self._snake_coordinate[0][0] 
+            print "self_apple", self._apple
+            print "self.apple 0",self._apple[0]
             if self._snake_coordinate[0][0] == -1 or self._snake_coordinate[0][0] == 80 or self._snake_coordinate[0][1] == -1 or self._snake_coordinate[0][1] == 80:
                 return
+       
 ###NOPE FUNKAR EJ
-            if self._snake_coordinate[0][0] == self._apple[0] and self._snake_coordinate[0][1] == self._apple[1]:
-                print "snake on apple"
-                
-#####            
-            self._snake_coordinate.pop()
+            if self._snake_coordinate[0][0] * 10 == self._apple[0] and self._snake_coordinate[0][1] * 10  == self._apple[1]:
+                self._apple = (randrange(10,780), randrange(10,580))
+            else:
+                self._snake_coordinate.pop()
+           
 
             if self.direction == self.UP :
                 self._snake_coordinate.insert(0, (self._snake_coordinate[0][0], self._snake_coordinate[0][1] - 1) )
@@ -194,7 +197,7 @@ class Main(events.Event):
             y = coord[1] * self._cellsize
             self._coord_rect = pygame.Rect(x,y, self._cellsize, self._cellsize)
             pygame.draw.rect(self._display_surf, self._green, self._coord_rect)
-        print "SNAKE", x,y
+
 
     def draw_apple(self,apple):
         
@@ -203,7 +206,7 @@ class Main(events.Event):
 
         self._apple_rect = pygame.Rect(x,y,self._cellsize,self._cellsize)
         pygame.draw.rect(self._display_surf,self._red,self._apple_rect)
-        print x,y
+     
 
 if __name__ == "__main__":
     theMain = Main()
