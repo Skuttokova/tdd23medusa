@@ -23,8 +23,11 @@ class Main(events.Event):
         self._cellsize = 10
         self._black = (0,0,0)
         self._green = (0,255,0)
+        self._red = (255,0,0)
         self._bgcolor = self._black
         self._image_list = None
+
+        self._apple = (randrange(10,780), randrange(10,580))
         super(Main, self).__init__()
         
     def on_init(self):
@@ -44,30 +47,44 @@ class Main(events.Event):
                             "OptionsSelected.png", "HighscoreSelected.png", "CreditsSelected.png", "QuitSelected.png",
                             "playBackground.png", "meny.png", "start2.png"]
 
+        
+
         #Make all images pygame.Surface object and make them transparent
         for i in range (len(self._image_list) -1):
             self._image_list[i] = pygame.image.load(self._image_list[i]).convert()
             self._image_list[i].set_colorkey((255,255,255))
         
     def on_loop(self):
-        #self._snake_coordinate = [(25,25), (26,25)]
-        self._snake_coordinate.pop()
-        
-        if self.direction == self.UP:
-            self._snake_coordinate.insert(0, (self._snake_coordinate[0][0], self._snake_coordinate[0][1] - 1) )
-            print self._snake_coordinate[0][0]
-        elif self.direction == self.DOWN:
-            self._snake_coordinate.insert(0, (self._snake_coordinate[0][0], self._snake_coordinate[0][1] + 1) )
-            print self._snake_coordinate[0][0]
-        elif self.direction == self.LEFT:
-            self._snake_coordinate.insert(0, (self._snake_coordinate[0][0] -1, self._snake_coordinate[0][1] ) )
-            print self._snake_coordinate[0][0]
-        elif self.direction == self.RIGHT:
-            self._snake_coordinate.insert(0, (self._snake_coordinate[0][0] +1, self._snake_coordinate[0][1] ) )
-            print self._snake_coordinate[0][0]
+        if self.state == 7:
 
-        
+            if self._snake_coordinate[0][0] == -1 or self._snake_coordinate[0][0] == 80 or self._snake_coordinate[0][1] == -1 or self._snake_coordinate[0][1] == 80:
+                return
+###NOPE FUNKAR EJ
+            if self._snake_coordinate[0][0] == self._apple[0] and self._snake_coordinate[0][1] == self._apple[1]:
+                print "snake on apple"
+                
+#####            
+            self._snake_coordinate.pop()
 
+            if self.direction == self.UP :
+                self._snake_coordinate.insert(0, (self._snake_coordinate[0][0], self._snake_coordinate[0][1] - 1) )
+            elif self.direction == self.DOWN:
+                self._snake_coordinate.insert(0, (self._snake_coordinate[0][0], self._snake_coordinate[0][1] + 1) )
+            elif self.direction == self.LEFT:
+                self._snake_coordinate.insert(0, (self._snake_coordinate[0][0] -1, self._snake_coordinate[0][1] ) )
+            elif self.direction == self.RIGHT:
+                self._snake_coordinate.insert(0, (self._snake_coordinate[0][0] +1, self._snake_coordinate[0][1] ) )
+
+############DETTA FUNKAR EJ          
+            for snake_body in self._snake_coordinate[1:]:
+                if (self._snake_coordinate[0][0], self._snake_coordinate[0][1] == snake_body):
+                    return
+#######################################                            
+            
+            
+
+            
+                    
 
     def game_rules(self):
         if self._snake_coordinate[0][0] == -1 or self._snake_coordinate[0][0] == self.width or self._snake_coordinate[0][1] == self.height:
@@ -149,10 +166,12 @@ class Main(events.Event):
     def state_play_game(self):
         self._display_surf.fill(self._bgcolor)
         self.draw_snake()
+        self.draw_apple(self._apple)
         pygame.display.flip()
 
     def show_credits(self):
         self._display_surf.blit(self._credit_screen,(0,0))
+
 
         
     def on_execute(self):
@@ -162,8 +181,7 @@ class Main(events.Event):
         while self._running:
             for event in pygame.event.get():
                 self.on_event(event)
-            if self._snake_coordinate[0][0] == -1 or self._snake_coordinate[0][0] == 80 or self._snake_coordinate[0][1] == 80:
-                return
+            
             
             self.on_loop()
             self.on_render()
@@ -176,7 +194,16 @@ class Main(events.Event):
             y = coord[1] * self._cellsize
             self._coord_rect = pygame.Rect(x,y, self._cellsize, self._cellsize)
             pygame.draw.rect(self._display_surf, self._green, self._coord_rect)
+        print "SNAKE", x,y
 
+    def draw_apple(self,apple):
+        
+        x = apple[0] 
+        y = apple[1] 
+
+        self._apple_rect = pygame.Rect(x,y,self._cellsize,self._cellsize)
+        pygame.draw.rect(self._display_surf,self._red,self._apple_rect)
+        print x,y
 
 if __name__ == "__main__":
     theMain = Main()
