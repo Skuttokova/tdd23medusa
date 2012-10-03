@@ -16,8 +16,8 @@ class Main(events.Event):
         self._menu_screen = None
         self._pts_random = None
         self._rand_nr = None
-        self._FPS = 15
-        self._snake_coordinate = [(25,25), (26,25)]
+        self._FPS = 135
+        self._snake_coordinate = [(250,250), (260,250)]
         self._move_dict = None
         self._direction = None
         self._cellsize = 10
@@ -59,11 +59,11 @@ class Main(events.Event):
             print "snake coord 0 0",self._snake_coordinate[0][0] 
             print "self_apple", self._apple
             print "self.apple 0",self._apple[0]
-            if self._snake_coordinate[0][0] == -1 or self._snake_coordinate[0][0] == 80 or self._snake_coordinate[0][1] == -1 or self._snake_coordinate[0][1] == 80:
+            if self._snake_coordinate[0][0] == -1 or self._snake_coordinate[0][0] == 800 or self._snake_coordinate[0][1] == -1 or self._snake_coordinate[0][1] == 800:
                 return
        
-###NOPE FUNKAR EJ
-            if self._snake_coordinate[0][0] * 10 == self._apple[0] and self._snake_coordinate[0][1] * 10  == self._apple[1]:
+###Does not work , snake_coord[0][0] is missing a 0....
+            if self._snake_coordinate[0][0]  == self._apple[0] and self._snake_coordinate[0][1]   == self._apple[1]:
                 self._apple = (randrange(10,780), randrange(10,580))
             else:
                 self._snake_coordinate.pop()
@@ -184,8 +184,7 @@ class Main(events.Event):
         while self._running:
             for event in pygame.event.get():
                 self.on_event(event)
-            
-            
+                      
             self.on_loop()
             self.on_render()
         self.on_cleanup()
@@ -193,8 +192,10 @@ class Main(events.Event):
         
     def draw_snake(self):
         for coord in self._snake_coordinate:
-            x = coord[0] * self._cellsize
-            y = coord[1] * self._cellsize
+            
+            x = coord[0] # * self._cellsize
+            y = coord[1] # * self._cellsize
+            print "x,y",x,y
             self._coord_rect = pygame.Rect(x,y, self._cellsize, self._cellsize)
             pygame.draw.rect(self._display_surf, self._green, self._coord_rect)
 
