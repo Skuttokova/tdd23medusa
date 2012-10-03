@@ -62,7 +62,7 @@ class Main(events.Event):
             if self._snake_coordinate[0][0] == -1 or self._snake_coordinate[0][0] == 800 or self._snake_coordinate[0][1] == -1 or self._snake_coordinate[0][1] == 800:
                 return
        
-###Does not work , snake_coord[0][0] is missing a 0....
+
             if self._snake_coordinate[0][0]  == self._apple[0] and self._snake_coordinate[0][1]   == self._apple[1]:
                 self._apple = (randrange(10,780), randrange(10,580))
             else:
