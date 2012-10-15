@@ -16,8 +16,8 @@ class Main(events.Event):
         self._menu_screen = None
         self._pts_random = None
         self._rand_nr = None
-        self._FPS = 135
-        self._snake_coordinate = [(250,250), (260,250)]
+        self._FPS = 15
+        self._snake_coordinate = [(25,25), (26,25)]
         self._move_dict = None
         self._direction = None
         self._cellsize = 10
@@ -27,7 +27,7 @@ class Main(events.Event):
         self._bgcolor = self._black
         self._image_list = None
         #self._apple = (500,300)
-        self._apple = (randrange(10,780), randrange(10,580))
+        self._apple = (randrange(1,78), randrange(1,58))
         super(Main, self).__init__()
         
     def on_init(self):
@@ -61,10 +61,14 @@ class Main(events.Event):
             print "self.apple 0",self._apple[0]
             if self._snake_coordinate[0][0] == -1 or self._snake_coordinate[0][0] == 800 or self._snake_coordinate[0][1] == -1 or self._snake_coordinate[0][1] == 800:
                 return
-       
+
+            for snake_body in self._snake_coordinate[1:]:
+                if (self._snake_coordinate[0][0], self._snake_coordinate[0][1]) == snake_body:
+                    return
+
 
             if self._snake_coordinate[0][0]  == self._apple[0] and self._snake_coordinate[0][1]   == self._apple[1]:
-                self._apple = (randrange(10,780), randrange(10,580))
+                self._apple = (randrange(1,78), randrange(1,58))
             else:
                 self._snake_coordinate.pop()
            
@@ -78,11 +82,7 @@ class Main(events.Event):
             elif self.direction == self.RIGHT:
                 self._snake_coordinate.insert(0, (self._snake_coordinate[0][0] +1, self._snake_coordinate[0][1] ) )
 
-############DETTA FUNKAR EJ          
-            for snake_body in self._snake_coordinate[1:]:
-                if (self._snake_coordinate[0][0], self._snake_coordinate[0][1] == snake_body):
-                    return
-#######################################                            
+
             
             
 
@@ -193,8 +193,8 @@ class Main(events.Event):
     def draw_snake(self):
         for coord in self._snake_coordinate:
             
-            x = coord[0] # * self._cellsize
-            y = coord[1] # * self._cellsize
+            x = coord[0]  * self._cellsize
+            y = coord[1]  * self._cellsize
             print "x,y",x,y
             self._coord_rect = pygame.Rect(x,y, self._cellsize, self._cellsize)
             pygame.draw.rect(self._display_surf, self._green, self._coord_rect)
@@ -202,8 +202,8 @@ class Main(events.Event):
 
     def draw_apple(self,apple):
         
-        x = apple[0] 
-        y = apple[1] 
+        x = apple[0] * self._cellsize
+        y = apple[1] * self._cellsize
 
         self._apple_rect = pygame.Rect(x,y,self._cellsize,self._cellsize)
         pygame.draw.rect(self._display_surf,self._red,self._apple_rect)
