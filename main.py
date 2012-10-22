@@ -26,6 +26,7 @@ class Main(events.Event):
         self._red = (255,0,0)
         self._bgcolor = self._black
         self._image_list = None
+        self._score = None
         #self._apple = (500,300)
         self._apple = (randrange(1,78), randrange(1,58))
         super(Main, self).__init__()
@@ -46,7 +47,7 @@ class Main(events.Event):
         self._image_list = ["Play.png", "Options.png", "Highscore.png", "Credits.png", "Quit.png", "PlaySelected.png",
                             "OptionsSelected.png", "HighscoreSelected.png", "CreditsSelected.png", "QuitSelected.png",
                             "playBackground.png", "meny.png", "start2.png"]
-
+        self._score = len(self._snake_coordinate)
         
 
         #Make all images pygame.Surface object and make them transparent
@@ -56,14 +57,14 @@ class Main(events.Event):
         
     def on_loop(self):
         if self.state == 7:
-            print "snake coord 0 0",self._snake_coordinate[0][0] 
-            print "self_apple", self._apple
-            print "self.apple 0",self._apple[0]
+            
             if self._snake_coordinate[0][0] == -1 or self._snake_coordinate[0][0] == 800 or self._snake_coordinate[0][1] == -1 or self._snake_coordinate[0][1] == 800:
+                self.game_over()
                 return
 
             for snake_body in self._snake_coordinate[1:]:
                 if (self._snake_coordinate[0][0], self._snake_coordinate[0][1]) == snake_body:
+                    self.game_over()
                     return
 
 
@@ -91,6 +92,7 @@ class Main(events.Event):
 
     def game_rules(self):
         if self._snake_coordinate[0][0] == -1 or self._snake_coordinate[0][0] == self.width or self._snake_coordinate[0][1] == self.height:
+            self.game_over()
             return
     
     def on_render(self):
@@ -172,6 +174,10 @@ class Main(events.Event):
         self.draw_apple(self._apple)
         pygame.display.flip()
 
+
+    def game_over(self):
+        print self._score
+    
     def show_credits(self):
         self._display_surf.blit(self._credit_screen,(0,0))
 
@@ -195,7 +201,6 @@ class Main(events.Event):
             
             x = coord[0]  * self._cellsize
             y = coord[1]  * self._cellsize
-            print "x,y",x,y
             self._coord_rect = pygame.Rect(x,y, self._cellsize, self._cellsize)
             pygame.draw.rect(self._display_surf, self._green, self._coord_rect)
 
