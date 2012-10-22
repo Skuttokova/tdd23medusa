@@ -21,13 +21,14 @@ class Main(events.Event):
         self._move_dict = None
         self._direction = None
         self._cellsize = 10
+        self._white = (255,255,255)
         self._black = (0,0,0)
         self._green = (0,255,0)
         self._red = (255,0,0)
         self._bgcolor = self._black
         self._image_list = None
         self._score = None
-        #self._apple = (500,300)
+        self._basic_font = None
         self._apple = (randrange(1,78), randrange(1,58))
         super(Main, self).__init__()
         
@@ -37,6 +38,7 @@ class Main(events.Event):
         pygame.display.set_caption('Medusa')
         self._running = True
 
+        self._basic_font = pygame.font.Font('freesansbold.ttf',18)
         self._set_image = pygame.image.load("start2.png").convert()
         self._start_screen = pygame.transform.scale(self._set_image, (800, 600 ))
         self._set_image = pygame.image.load("meny.png").convert()
@@ -172,13 +174,13 @@ class Main(events.Event):
         self._display_surf.fill(self._bgcolor)
         self.draw_snake()
         self.draw_apple(self._apple)
+        self.draw_score(len(self._snake_coordinate))
         pygame.display.flip()
 
 
     def game_over(self):
         self._score = len(self._snake_coordinate)
-        print self._score
-    
+        return
     def show_credits(self):
         self._display_surf.blit(self._credit_screen,(0,0))
 
@@ -213,7 +215,12 @@ class Main(events.Event):
 
         self._apple_rect = pygame.Rect(x,y,self._cellsize,self._cellsize)
         pygame.draw.rect(self._display_surf,self._red,self._apple_rect)
-     
+
+    def draw_score(self,score):
+        self._score_surf = self._basic_font.render('Score: %s' %(score), True, self._white)
+        self._score_rect = self._score_surf.get_rect()
+        self._score_rect.topleft = (10,10)
+        self._display_surf.blit(self._score_surf, self._score_rect)
 
 if __name__ == "__main__":
     theMain = Main()
