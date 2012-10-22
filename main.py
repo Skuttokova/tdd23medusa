@@ -47,7 +47,7 @@ class Main(events.Event):
         self._image_list = ["Play.png", "Options.png", "Highscore.png", "Credits.png", "Quit.png", "PlaySelected.png",
                             "OptionsSelected.png", "HighscoreSelected.png", "CreditsSelected.png", "QuitSelected.png",
                             "playBackground.png", "meny.png", "start2.png"]
-        self._score = len(self._snake_coordinate)
+       # self._score = len(self._snake_coordinate)
         
 
         #Make all images pygame.Surface object and make them transparent
@@ -176,6 +176,7 @@ class Main(events.Event):
 
 
     def game_over(self):
+        self._score = len(self._snake_coordinate)
         print self._score
     
     def show_credits(self):
