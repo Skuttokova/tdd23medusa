@@ -139,6 +139,12 @@ class Main(events.Event):
             self.state_play_game()
         elif self.state == 8:
             self.show_credits()
+        elif self.state == 9:
+            self.display_highscore()
+        elif self.state == 10:
+            self.option_enter(self._FPS)
+        elif self.state == 11:
+            self.game_over()
         self.menu_clock.tick(self._FPS)
         pygame.display.flip()
         
@@ -181,7 +187,7 @@ class Main(events.Event):
         self._display_surf.blit(self._image_list[1],(210,300))
         self._display_surf.blit(self._image_list[7],(210,350))
         self._display_surf.blit(self._image_list[3],(210,400))
-
+  
     def state_credit_selected(self):
         
         self._display_surf.blit(self._image_list[2],(210,350))
@@ -208,8 +214,13 @@ class Main(events.Event):
         pygame.display.flip()
 
 
+
+
     def game_over(self):
-        self._score = len(self._green_snake_coordinate)
+        self._score = (len(self._green_snake_coordinate)+len(self._blue_snake_coordinate)+len(self._yellow_snake_coordinate)+len(self._cyan_snake_coordinate)-8)
+       
+        self.create_highscore(self._score)
+        self.state = 2
         return
 
     def show_credits(self):
@@ -257,6 +268,49 @@ class Main(events.Event):
         self._score_rect = self._score_surf.get_rect()
         self._score_rect.topleft = (10,10)
         self._display_surf.blit(self._score_surf, self._score_rect)
+
+
+    def create_highscore(self,score):
+        with open('hscore.txt','a') as f:
+            f.write(str(score))
+            f.write('\n')
+        f.close()
+        return
+
+
+    def display_highscore(self):
+        f = open('hscore.txt','r')
+
+    
+        
+        self._display_surf.fill(self._black)
+        for index,line in enumerate(f.readlines()):
+            line = line.split("\n")[0]
+            self._score_surf = self._basic_font.render('%s,' %(line), True, self._white)
+            self._score_rect = self._score_surf.get_rect()
+            self._score_rect.left = 20 * index
+            
+            self._display_surf.blit(self._score_surf, self._score_rect)
+        
+    def write_game_over(self):
+
+        self._score_surf = self._basic_font.render(' %s' %('Game over'), True, self._white)
+        self._score_rect = self._score_surf.get_rect()
+        self._score_rect.topright = (10,10)
+        self._display_surf.blit(self._score_surf, self._score_rect)
+
+
+
+    def option_enter(self,fps):
+
+        self._display_surf.fill(self._black)
+
+        self._text_surf = self._basic_font.render('FPS: %s' %(fps), True, self._white)
+        self._text_rect = self._text_surf.get_rect()
+        self._text_rect.left = 10
+        self._display_surf.blit(self._text_surf, self._text_rect)
+
+
 
 if __name__ == "__main__":
     theMain = Main()
