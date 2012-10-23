@@ -31,7 +31,11 @@ class Event(object):
         
                 elif self.state == 6:
                     self._running = False
-
+                elif self.state == 4:
+                    self.state = 9
+                elif self.state == 3:
+                    self.state = 10
+                    
             elif event.key == pygame.K_LEFT and self.direction != self.RIGHT:
                 self.direction = self.LEFT
             elif event.key == pygame.K_RIGHT and self.direction != self.LEFT:
@@ -40,4 +44,11 @@ class Event(object):
                 self.direction = self.UP
             elif event.key == pygame.K_DOWN and self.direction != self.UP:
                 self.direction = self.DOWN
+            elif event.key == pygame.K_LEFT and self.state == 8:
+                self.state = 2
+            elif event.key == pygame.K_LEFT and self.state == 9:
+                self.state = 2
+            elif event.key == pygame.K_LEFT and self.state == 10:
+                self.state = 2
 
+            
