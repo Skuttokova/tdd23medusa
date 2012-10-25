@@ -93,7 +93,7 @@ class Main(events.Event):
             self.game_over()
             return
 
-        for snake_body in snake_coordinate[1]:
+        for snake_body in snake_coordinate[1:]:
             if (snake_coordinate[0][0], snake_coordinate[0][1]) == snake_body:
                  self.game_over()
                  return
@@ -220,8 +220,9 @@ class Main(events.Event):
         self._score = (len(self._green_snake_coordinate)+len(self._blue_snake_coordinate)+len(self._yellow_snake_coordinate)+len(self._cyan_snake_coordinate)-8)
        
         self.create_highscore(self._score)
-        self.state = 2
-        return
+#        self.__init__()
+        self.state = 1
+
 
     def show_credits(self):
         self._display_surf.blit(self._credit_screen,(0,0))
@@ -281,7 +282,6 @@ class Main(events.Event):
     def display_highscore(self):
         f = open('hscore.txt','r')
 
-    
         
         self._display_surf.fill(self._black)
         for index,line in enumerate(f.readlines()):
