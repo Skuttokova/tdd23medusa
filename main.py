@@ -220,8 +220,9 @@ class Main(events.Event):
         self._score = (len(self._green_snake_coordinate)+len(self._blue_snake_coordinate)+len(self._yellow_snake_coordinate)+len(self._cyan_snake_coordinate)-8)
        
         self.create_highscore(self._score)
+#        self.state = 1
 #        self.__init__()
-        self.state = 1
+###DONT WORK
 
 
     def show_credits(self):
